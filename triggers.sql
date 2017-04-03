@@ -210,4 +210,18 @@ CREATE TRIGGER check_prerequisites
 		END IF;
 	END//
 
+DELIMITER ;
+
+# Checks if student has time conflict with registered course
+DROP TRIGGER IF EXISTS check_student_time_conflict;
+
 DELIMITER //
+
+CREATE TRIGGER check_student_time_conflict
+	BEFORE INSERT ON student_reg
+    FOR EACH ROW
+    BEGIN
+		
+    END//
+
+DELIMITER ;
