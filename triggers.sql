@@ -27,7 +27,7 @@ CREATE TRIGGER prof_can_teach_before_added_to_course
 
 DELIMITER ;
 
-# Adds a registration to prof_reg after assigned to a course
+# Adds a registration to prof_reg after course added with prof
 DROP TRIGGER IF EXISTS prof_in_reg_after_added_to_course;
 
 DELIMITER //
@@ -38,13 +38,41 @@ CREATE TRIGGER prof_in_reg_after_added_to_course
     BEGIN
 		DECLARE max_seq	INT;
         
-        SELECT MAX(teaching_seq)
-        INTO max_seq
-        FROM prof_reg
-        WHERE prof_id = NEW.prof_id;
-        
-        INSERT INTO prof_reg
-        VALUES (NEW.prof_id, max_seq + 1, NEW.crn);
+        IF (NEW.prof_id IS NOT NULL)
+        THEN
+			SELECT MAX(teaching_seq)
+			INTO max_seq
+			FROM prof_reg
+			WHERE prof_id = NEW.prof_id;
+			
+			INSERT INTO prof_reg
+			VALUES (NEW.prof_id, max_seq + 1, NEW.crn);
+        END IF;
+	END//
+
+DELIMITER ;
+
+# Adds a registration to prof_reg after course updated with prof
+DROP TRIGGER IF EXISTS prof_in_reg_after_added_to_course;
+
+DELIMITER //
+
+CREATE TRIGGER prof_in_reg_after_added_to_course
+	AFTER UPDATE ON course
+    FOR EACH ROW
+    BEGIN
+		DECLARE max_seq	INT;
+		
+		IF NOT (NEW.prof_id <=> OLD.prof_id)
+        THEN
+			SELECT MAX(teaching_seq)
+			INTO max_seq
+			FROM prof_reg
+			WHERE prof_id = NEW.prof_id;
+			
+			INSERT INTO prof_reg
+			VALUES (NEW.prof_id, max_seq + 1, NEW.crn);
+		END IF;
 	END//
 
 DELIMITER ;
@@ -96,19 +124,25 @@ DROP TRIGGER IF EXISTS course_reg_less_than_capacity;
 DELIMITER //
 
 CREATE TRIGGER course_reg_less_than_capacity
-	BEFORE INSERT ON course
+	BEFORE INSERT ON student_reg
     FOR EACH ROW
     BEGIN
 		DECLARE	course_reg	INT;
+        DECLARE	course_cap	INT;
         
         # Students cannot register for the same course twice, so this will always
         # produce the number of unique students that registered for the course
         SELECT COUNT(*)
         INTO course_reg
         FROM student_reg
-        WHERE reg_crn = NEW.crn;
+        WHERE reg_crn = NEW.reg_crn;
         
-        IF course_reg > NEW.capacity
+        SELECT capacity
+        INTO course_cap
+        FROM course
+        WHERE crn = NEW.reg_crn;
+        
+        IF course_reg > course_cap
         THEN
 			SIGNAL SQLSTATE '45000'
 				SET MESSAGE_TEXT = 'Cannot add or update row: Course full';
@@ -158,16 +192,16 @@ CREATE TRIGGER check_prerequisites
         INTO not_satisfied
         FROM
         (
-			SELECT A.prereq_subj, A.prereq_num
-            FROM prereq AS A
+			SELECT a1.prereq_subj, a1.prereq_num
+            FROM prereq AS a1
             WHERE
             (
 				SELECT 1
-                FROM student_history AS B
-                WHERE B.taken_subj = A.prereq_subj
-					AND B.taken_num = A.prereq_num
+                FROM student_history AS a2
+                WHERE a2.taken_subj = a1.prereq_subj
+					AND a2.taken_num = a1.prereq_num
             )
-        );
+        ) AS a3;
         
         IF not_satisfied > 0
         THEN
