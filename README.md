@@ -1,4 +1,4 @@
-# db-project
+# nlp-sql-interface
 Final project for CS 3200 Database Design at Northeastern University
 
 This is an IBM Bluemix app that can be deployed using CloudFoundry through terminal on your local machine.
