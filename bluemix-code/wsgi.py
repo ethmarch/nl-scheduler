@@ -31,7 +31,11 @@ def index():
     #Close the database connection
     cursor.close()
 
-    output = template('view', rows=result)
+    if len(query) == 20:
+        output = template('view', rows=result, title=query[14:])
+    else:
+        output = template('view', rows=result, title=query.split()[1])
+
     return output
 
     # except Exception as err:

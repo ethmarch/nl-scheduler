@@ -1,4 +1,4 @@
-<h1>These are the students in the database</h1>
+<h1>These are the {{title}}s in the database</h1>
 <table>
 %for row in rows:
     <tr>
