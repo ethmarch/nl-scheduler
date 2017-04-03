@@ -1,7 +1,3 @@
-#MySQL Sample Program
-#Programmer: Justin Sova
-#Simple mysql example
-
 #1. Prerequisite Configuration
 import os
 import sys

@@ -27,3 +27,16 @@ https://github.com/cloudfoundry/cli#downloads
 
 To access the site the link is https://db-project.mybluemix.net
 
+
+Ensure that when you want to push to the repo again, your terminal is at the db-project/ level, not the 
+bluemix-code level. Git wants to read that folder as a submodule if you push from there, and we will have to reset 
+the repo if that gets turned into a submodule again. 
+
+We are using the Bottle framework for connecting and interacting with SQL through Python, they have good tutorials:
+http://bottlepy.org/docs/dev/index.html
+
+For now, I have the wsgi.py file interact with the starwarsFINAL db which is just local. If the connection is not
+working for you, make sure that the username and password are correct under the 'else' case in the index function.
+
+
+
