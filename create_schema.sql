@@ -38,7 +38,7 @@ CREATE TABLE course
     course_name			VARCHAR(50)		NOT NULL,
     stime				TIME 			NOT NULL,
     ftime				TIME 			NOT NULL,
-    days				VARCHAR(5)		NOT NULL,
+    days				SET('M', 'T', 'W', 'R', 'F')		NOT NULL,
     crn					INT				PRIMARY KEY,
     capacity			INT				NOT NULL,
     prof_id				INT 			NOT NULL,
