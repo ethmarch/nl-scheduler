@@ -221,7 +221,22 @@ CREATE TRIGGER check_student_time_conflict
 	BEFORE INSERT ON student_reg
     FOR EACH ROW
     BEGIN
-		
+		# course to be added
+		SET @added := (SELECT stime, ftime, days
+        FROM course
+        WHERE crn = NEW.reg_crn);
+        
+        # current student's schedule
+		SET @schedule := (SELECT a2.stime, a2.ftime, a2.days
+        FROM student_reg a1
+			INNER JOIN course a2
+            ON a1.reg_crn = a2.crn
+        WHERE a1.student_id = NEW.student_id);
+        
+        # check for conflicts
+        
+        SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'Cannot add or update row: Prerequisite courses not satsified';
     END//
 
 DELIMITER ;
