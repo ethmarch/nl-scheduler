@@ -1,44 +1,5 @@
 USE scheduling;
 
-# Checks if the given professor id exists in the professor table
-DROP PROCEDURE IF EXISTS prof_exists;
-
-DELIMITER //
-
-CREATE PROCEDURE prof_exists
-(
-id	INT(11)
-)
-BEGIN
-	DECLARE	prof_exists	INT;
-    
-	SELECT COUNT(*)
-    FROM professor
-    WHERE prof_id = id;
-        
-	IF prof_exists = 0
-	THEN
-		SIGNAL SQLSTATE '45000'
-			SET MESSAGE_TEXT = 'Cannot add or update row: Professor does not exist';
-	END IF;
-END//
-
-DELIMITER ;
-
-# Ensures a professor exists before assigned to a course
-DROP TRIGGER IF EXISTS prof_exists_before_added_to_course;
-
-DELIMITER //
-
-CREATE TRIGGER prof_exists_before_added_to_course
-	BEFORE INSERT ON course
-    FOR EACH ROW
-    BEGIN
-		CALL prof_exists(NEW.prof_id);
-	END//
-
-DELIMITER ;
-
 # Ensures a given professor can teach a class before assigned to a course
 DROP TRIGGER IF EXISTS prof_can_teach_before_added_to_course;
 
@@ -88,67 +49,19 @@ CREATE TRIGGER prof_in_reg_after_added_to_course
 
 DELIMITER ;
 
-# Ensures a professor exists before declaring what s/he can teach
-DROP TRIGGER IF EXISTS prof_exists_before_can_teach;
+# Adds professor to course after added to prof_reg (reverse of trigger above)
+DROP TRIGGER IF EXISTS prof_in_course_after_registered;
 
 DELIMITER //
 
-CREATE TRIGGER prof_exists_before_can_teach
-	BEFORE INSERT ON prof_subject
+CREATE TRIGGER prof_in_course_after_registered
+	AFTER INSERT ON prof_reg
     FOR EACH ROW
     BEGIN
-		CALL prof_exists(NEW.prof_id);
-	END//
-
-DELIMITER ;
-
-# Checks that a classroom exists before it is assigned to a course
-DROP TRIGGER IF EXISTS classroom_exists_before_added_to_course;
-
-DELIMITER //
-
-CREATE TRIGGER classroom_exists_before_added_to_course
-	BEFORE INSERT ON course
-    FOR EACH ROW
-    BEGIN
-		DECLARE	room_count	INT;
-        
-        SELECT COUNT(*)
-        INTO room_count
-        FROM classroom
-        WHERE room_idx = NEW.room_idx;
-        
-        IF room_count = 0
-        THEN
-			SIGNAL SQLSTATE '45000'
-				SET MESSAGE_TEXT = 'Cannot add or update row: Classroom does not exist';
-		END IF;
-	END//
-
-DELIMITER ;
-
-# Checks that a classroom exists before it is assigned to a course
-DROP TRIGGER IF EXISTS classroom_exists_before_added_to_course;
-
-DELIMITER //
-
-CREATE TRIGGER classroom_exists_before_added_to_course
-	BEFORE INSERT ON course
-    FOR EACH ROW
-    BEGIN
-		DECLARE	room_count	INT;
-        
-        SELECT COUNT(*)
-        INTO room_count
-        FROM classroom
-        WHERE room_idx = NEW.room_idx;
-        
-        IF room_count = 0
-        THEN
-			SIGNAL SQLSTATE '45000'
-				SET MESSAGE_TEXT = 'Cannot add or update row: Classroom does not exist';
-		END IF;
-	END//
+		UPDATE course
+        SET prof_id = NEW.prof_id
+        WHERE crn = NEW.reg_crn;
+    END//
 
 DELIMITER ;
 
@@ -234,9 +147,33 @@ DELIMITER ;
 DROP TRIGGER IF EXISTS check_prerequisites;
 
 DELIMITER //
--- 
--- CREATE TRIGGER check_prerequisites
--- 	BEFORE INSERT ON student_reg
---     FOR EACH ROW
---     BEGIN
--- 		
+
+CREATE TRIGGER check_prerequisites
+	BEFORE INSERT ON student_reg
+    FOR EACH ROW
+    BEGIN
+		DECLARE	not_satisfied	INT;
+        
+		SELECT COUNT(*)
+        INTO not_satisfied
+        FROM
+        (
+			SELECT A.prereq_subj, A.prereq_num
+            FROM prereq AS A
+            WHERE
+            (
+				SELECT 1
+                FROM student_history AS B
+                WHERE B.taken_subj = A.prereq_subj
+					AND B.taken_num = A.prereq_num
+            )
+        );
+        
+        IF not_satisfied > 0
+        THEN
+			SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'Cannot add or update row: Prerequisite courses not satsified';
+		END IF;
+	END//
+
+DELIMITER //
