@@ -5,7 +5,7 @@ import bottle
 import json
 import mysql.connector
 import psycopg2
-import urlparse
+from bottle import get, post, request, route # or route
 
 # urlparse.uses_netloc.append("postgres")
 # url = urlparse.urlparse(os.environ["postgres://ygqehxjv:q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf@echo.db.elephantsql.com:5432/ygqehxjv"])
@@ -49,9 +49,25 @@ def index():
         # return 500 error if any exceptions are thrown and report exceptions via webpage
         bottle.abort(500, "%s" % (err)) 
 
-@bottle.route('/hello')
-def hello():
-    return "Hello World!"
+@get('/login') # or @route('/login')
+def login():
+    return '''
+        <form action="/login" method="post">
+            Username: <input name="username" type="text" />
+            Password: <input name="password" type="password" />
+            <input value="Login" type="submit" />
+        </form>
+    '''
+
+@post('/login') # or @route('/login', method='POST')
+def do_login():
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    if username == 'root' and password == 'root':
+        return "<p>Your login information was correct.</p>"
+    else:
+        return "<p>Login failed.</p>"
+
 
 #return custon 404 error page
 @bottle.error(404)
