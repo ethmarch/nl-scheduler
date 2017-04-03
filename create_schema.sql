@@ -54,17 +54,13 @@ CREATE TABLE course
 
 CREATE TABLE prereq
 (
-	parent_crn			INT,
-    prereq_seq			INT,
-    prereq_crn			INT 			NOT NULL,
+	parent_subj			VARCHAR(8)			NOT NULL,
+    parent_num			INT					NOT NULL,
+    prereq_seq			INT					NOT NULL,
+    prereq_subj			VARCHAR(8)			NOT NULL,
+    prereq_num			INT					NOT NULL,
     CONSTRAINT prereq_pk
-		PRIMARY KEY(parent_crn, prereq_seq),
-    CONSTRAINT prereq_fk1
-		FOREIGN KEY (parent_crn)
-        REFERENCES course (crn),
-	CONSTRAINT prereq_fk2
-		FOREIGN KEY (prereq_crn)
-        REFERENCES course (crn)
+		PRIMARY KEY(parent_subj, parent_num, prereq_seq)
 );
 
 CREATE TABLE student_reg
@@ -87,6 +83,8 @@ CREATE TABLE student_history
 	student_id			INT,
     taken_seq			INT,
     taken_crn			INT				NOT NULL,
+    taken_subj			VARCHAR(8)		NOT NULL,
+    taken_num			INT 			NOT NULL,
     CONSTRAINT student_history_pk
 		PRIMARY KEY (student_id, taken_seq),
     CONSTRAINT student_history_fk1
