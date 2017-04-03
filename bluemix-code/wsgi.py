@@ -4,58 +4,37 @@ import sys
 import bottle
 import json
 import mysql.connector
+import psycopg2
+import urlparse
 
-mysql_info = dict()
+# urlparse.uses_netloc.append("postgres")
+# url = urlparse.urlparse(os.environ["postgres://ygqehxjv:q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf@echo.db.elephantsql.com:5432/ygqehxjv"])
 # Return status of MySQL database
 # -bottle.route registers the index route to this function
 @bottle.route('/')
 def index():
-
+    conn = psycopg2.connect(
+            database="ygqehxjv",
+            user="ygqehxjv",
+            password="q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf",
+            host="echo.db.elephantsql.com",
+            port="5432"
+            )
     #Catch any possible exceptions and print them to webpage when thrown
     try:
-
-        #2. Check if app is in BlueMix Environment
-        if 'VCAP_SERVICES' in os.environ:
-            
-            #3. Read Connection Parameters from VCAP_SERVICES Environment Variable
-
-            #convert vcap-services json into a dictionary
-            vcap_services = json.loads(os.environ['VCAP_SERVICES'])
-
-            #load information about mysql database into a separate dictionary
-            # and then grab the credentials
-            for key, value in vcap_services.iteritems():   # iter on both keys and values
-                if key.startswith('mysql'):
-                    mysql_info = vcap_services[key][0]
-            cred = mysql_info['credentials']
-            
-            #store parameters
-            host = cred['host'].encode('utf8')
-            dbusername = cred['user'].encode('utf8')
-            dbpassword = cred['password'].encode('utf8')
-            dbname = cred['name'].encode('utf8')
-            port = cred['port']
-        else:
-            #use these by default
-            host = '127.0.0.1'
-            port = 3306
-            dbusername = 'root'
-            dbpassword = 'root'
-            dbname = 'starwarsFINAL'   
+        #use these by default
+        host = '127.0.0.1'
+        port = 3306
+        dbusername = 'root'
+        dbpassword = 'root'
+        dbname = 'starwarsFINAL'   
 
         #4. Make Connection to MySQL DB
-        con = mysql.connector.connect(host = host, user = dbusername, password = dbpassword, database = dbname , port = port)
-        cursor = con.cursor()
-        
-        #send a query
-        cursor.execute("SELECT VERSION()")
-
-        #grab the result
-        mysql_version = 'MySQL Version: %s \n' % (cursor.fetchone())
-        sys.stderr.write(mysql_version)
+        # con = mysql.connector.connect(host = host, user = dbusername, password = dbpassword, database = dbname , port = port)
+        cursor = conn.cursor()
 
 
-        cursor.execute("SELECT * FROM characters")
+        cursor.execute("SELECT * FROM student")
         result = cursor.fetchall()
         return str(result)
 

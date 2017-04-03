@@ -35,8 +35,14 @@ the repo if that gets turned into a submodule again.
 We are using the Bottle framework for connecting and interacting with SQL through Python, they have good tutorials:
 http://bottlepy.org/docs/dev/index.html
 
-For now, I have the wsgi.py file interact with the starwarsFINAL db which is just local. If the connection is not
-working for you, make sure that the username and password are correct under the 'else' case in the index function.
+The app uses ElephantSQL, which is a PostgresSQL distribution, which is hosted in the cloud. DO NOT CHANGE THE USERNAME AND PASSWORD IN THE wsgi.py FILE FOR THE CONNECTION. In order to add to the database, go to 
+https://console.ng.bluemix.net/dashboard/apps 
+
+Then choose db-project, click on ElephantSQL-g4 under 'Connections', and then click 'Open Dashboard'
+
+Then click on the 'Browser' tab on the top and an interface to insert in values to the database will come up.
+You can create tables, add values, and do other SQL commands in the box. 
+MAKE SURE YOU USE SINGLE QUOTES '' INSTEAD OF DOUBLE QUOTES WHEN DEFINING STRING VALUES, IF NOT IT WON'T WORK.
 
 
 
