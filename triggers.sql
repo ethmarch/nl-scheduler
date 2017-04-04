@@ -221,22 +221,104 @@ CREATE TRIGGER check_student_time_conflict
 	BEFORE INSERT ON student_reg
     FOR EACH ROW
     BEGIN
+		DECLARE	stime			INT;
+        DECLARE ftime			INT;
+        DECLARE days			SET('M','T','W','R','F');
+        DECLARE	conflict_count	INT;
+        
 		# course to be added
-		SET @added := (SELECT stime, ftime, days
+		SELECT stime, ftime, CONV(CAST(days AS SIGNED),10,2)
+        INTO stime, ftime, days
         FROM course
-        WHERE crn = NEW.reg_crn);
+        WHERE crn = NEW.reg_crn;
         
         # current student's schedule
-		SET @schedule := (SELECT a2.stime, a2.ftime, a2.days
+		SELECT COUNT(*)
+        INTO conflict_count
         FROM student_reg a1
 			INNER JOIN course a2
             ON a1.reg_crn = a2.crn
-        WHERE a1.student_id = NEW.student_id);
+        WHERE a1.student_id = NEW.student_id
+			AND (@days & a2.days) > 0
+            AND ((@stime > a2.stime)
+				OR (@ftime < a2.ftime));
         
         # check for conflicts
-        
-        SIGNAL SQLSTATE '45000'
+        IF conflict_count > 0
+        THEN
+			SIGNAL SQLSTATE '45000'
 				SET MESSAGE_TEXT = 'Cannot add or update row: Prerequisite courses not satsified';
+		END IF;
+    END//
+
+DELIMITER ;
+
+# Checks if professor has time conflict with registered course
+DROP TRIGGER IF EXISTS check_prof_time_conflict;
+
+DELIMITER //
+
+CREATE TRIGGER check_prof_time_conflict
+	BEFORE INSERT ON prof_reg
+    FOR EACH ROW
+    BEGIN
+		DECLARE	stime			INT;
+        DECLARE ftime			INT;
+        DECLARE days			SET('M','T','W','R','F');
+        DECLARE	conflict_count	INT;
+        
+		# course to be added
+		SELECT stime, ftime, CONV(CAST(days AS SIGNED),10,2)
+        INTO stime, ftime, days
+        FROM course
+        WHERE crn = NEW.reg_crn;
+        
+        # current student's schedule
+		SELECT COUNT(*)
+        INTO conflict_count
+        FROM prof_reg a1
+			INNER JOIN course a2
+            ON a1.reg_crn = a2.crn
+        WHERE a1.prof_id = NEW.prof_id
+			AND (@days & a2.days) > 0
+            AND ((@stime > a2.stime)
+				OR (@ftime < a2.ftime));
+        
+        # check for conflicts
+        IF conflict_count > 0
+        THEN
+			SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'Cannot add or update row: Prerequisite courses not satsified';
+		END IF;
+    END//
+
+DELIMITER ;
+
+# Checks if course has time conflict with existing course
+DROP TRIGGER IF EXISTS check_course_time_conflict;
+
+DELIMITER //
+
+CREATE TRIGGER check_course_time_conflict
+	BEFORE INSERT ON course
+    FOR EACH ROW
+    BEGIN
+        DECLARE	conflict_count	INT;
+        
+		SELECT COUNT(*)
+        INTO conflict_count
+        FROM course
+        WHERE crn = NEW.crn
+			AND ((CONV(CAST(NEW.days AS SIGNED),10,2)) & days) > 0
+            AND ((NEW.stime > stime)
+				OR (NEW.ftime < ftime));
+        
+        # check for conflicts
+        IF conflict_count > 0
+        THEN
+			SIGNAL SQLSTATE '45000'
+				SET MESSAGE_TEXT = 'Cannot add or update row: Prerequisite courses not satsified';
+		END IF;
     END//
 
 DELIMITER ;
