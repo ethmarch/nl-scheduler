@@ -5,16 +5,17 @@ import bottle
 import json
 import mysql.connector
 import psycopg2
-from bottle import route, run, template, request
+from bottle import get, post, request, route, run, template
 
 # urlparse.uses_netloc.append("postgres")
 # url = urlparse.urlparse(os.environ["postgres://ygqehxjv:q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf@echo.db.elephantsql.com:5432/ygqehxjv"])
 # Return status of MySQL database
 # -bottle.route registers the index route to this function
+
 @bottle.route('/', method='POST')
 def index():
     query = request.forms.get('query')
-
+    
     conn = psycopg2.connect(
             database="ygqehxjv",
             user="ygqehxjv",
@@ -22,7 +23,6 @@ def index():
             host="echo.db.elephantsql.com",
             port="5432"
             )
-    #Catch any possible exceptions and print them to webpage when thrown
     # try:
     cursor = conn.cursor()
     cursor.execute(query)
