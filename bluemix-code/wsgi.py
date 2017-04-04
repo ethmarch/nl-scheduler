@@ -5,14 +5,17 @@ import bottle
 import json
 import mysql.connector
 import psycopg2
-from bottle import get, post, request, route # or route
+from bottle import get, post, request, route, run, template
 
 # urlparse.uses_netloc.append("postgres")
 # url = urlparse.urlparse(os.environ["postgres://ygqehxjv:q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf@echo.db.elephantsql.com:5432/ygqehxjv"])
 # Return status of MySQL database
 # -bottle.route registers the index route to this function
-@bottle.route('/')
+
+@bottle.route('/', method='POST')
 def index():
+    query = request.forms.get('query')
+    
     conn = psycopg2.connect(
             database="ygqehxjv",
             user="ygqehxjv",
@@ -20,54 +23,33 @@ def index():
             host="echo.db.elephantsql.com",
             port="5432"
             )
-    #Catch any possible exceptions and print them to webpage when thrown
-    try:
-        #use these by default
-        host = '127.0.0.1'
-        port = 3306
-        dbusername = 'root'
-        dbpassword = 'root'
-        dbname = 'starwarsFINAL'   
+    # try:
+    cursor = conn.cursor()
+    cursor.execute(query)
+    result = cursor.fetchall()
 
-        #4. Make Connection to MySQL DB
-        # con = mysql.connector.connect(host = host, user = dbusername, password = dbpassword, database = dbname , port = port)
-        cursor = conn.cursor()
+    #Close the database connection
+    cursor.close()
 
+    if query[7:8] == '*':
+        output = template('view', rows=result, title=query.split()[3])
+    else:
+        output = template('view', rows=result, title=query.split()[1])
 
-        cursor.execute("SELECT * FROM student")
-        result = cursor.fetchall()
-        return str(result)
+    return output
 
-        #Close the database connection
-        cursor.close()
-        con.close()
- 
-        #print the result
-        return '<title>MySQL Status </title> MySQL connection successful. <h5><p>%s</p></h5>' % (result) 
+    # except Exception as err:
+    #     # return 500 error if any exceptions are thrown and report exceptions via webpage
+    #     bottle.abort(500, "%s" % (err)) 
 
-    except Exception as err:
-        # return 500 error if any exceptions are thrown and report exceptions via webpage
-        bottle.abort(500, "%s" % (err)) 
-
-@get('/login') # or @route('/login')
-def login():
+@bottle.route('/')
+def queryInput():
     return '''
-        <form action="/login" method="post">
-            Username: <input name="username" type="text" />
-            Password: <input name="password" type="password" />
-            <input value="Login" type="submit" />
+        <form method="post">
+            Query: <input name="query" type="text" />
+            <input type="submit" />
         </form>
     '''
-
-@post('/login') # or @route('/login', method='POST')
-def do_login():
-    username = request.forms.get('username')
-    password = request.forms.get('password')
-    if username == 'root' and password == 'root':
-        return "<p>Your login information was correct.</p>"
-    else:
-        return "<p>Login failed.</p>"
-
 
 #return custon 404 error page
 @bottle.error(404)

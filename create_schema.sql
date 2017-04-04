@@ -59,6 +59,7 @@ CREATE TABLE prereq
     prereq_seq			INT								NOT NULL,
     prereq_subj			VARCHAR(8)						NOT NULL,
     prereq_num			INT								NOT NULL,
+
     CONSTRAINT prereq_pk
 		PRIMARY KEY(parent_subj, parent_num, prereq_seq)
 );
