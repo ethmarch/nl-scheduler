@@ -31,8 +31,8 @@ def index():
     #Close the database connection
     cursor.close()
 
-    if len(query) == 20:
-        output = template('view', rows=result, title=query[14:])
+    if query[7:8] == '*':
+        output = template('view', rows=result, title=query.split()[3])
     else:
         output = template('view', rows=result, title=query.split()[1])
 
