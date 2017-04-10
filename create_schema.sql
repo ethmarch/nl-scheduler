@@ -7,7 +7,7 @@ USE scheduling;
 
 CREATE TABLE student
 (
-	student_id			INT 							PRIMARY KEY		AUTO_INCREMENT,
+	student_id			INT 							NOT NULL 	PRIMARY KEY 	AUTO_INCREMENT,
     fname				VARCHAR(50)						NOT NULL,
     lname				VARCHAR(50)						NOT NULL,
     grad				INT								NOT NULL,
