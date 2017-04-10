@@ -27,14 +27,16 @@ def index():
     cursor = conn.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
+    titles = cursor.description
+
 
     #Close the database connection
     cursor.close()
 
     if query[7:8] == '*':
-        output = template('view', rows=result, title=query.split()[3])
+        output = template('templates/results', cols=titles[0][0], rows=result, title=query.split()[3])
     else:
-        output = template('view', rows=result, title=query.split()[1])
+        output = template('templates/results',  cols=titles, rows=result, title=query.split()[1])
 
     return output
 
@@ -42,9 +44,16 @@ def index():
     #     # return 500 error if any exceptions are thrown and report exceptions via webpage
     #     bottle.abort(500, "%s" % (err)) 
 
+@bottle.route('/index')
+def queryInput():
+    output = template('templates/index')
+    return output 
+
 @bottle.route('/')
 def queryInput():
-    return '''
+    output = template('templates/front')
+    return output 
+    '''
         <form method="post">
             Query: <input name="query" type="text" />
             <input type="submit" />
