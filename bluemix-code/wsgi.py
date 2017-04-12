@@ -6,52 +6,30 @@ import json
 import mysql.connector
 import psycopg2
 from bottle import get, post, request, route, run, template, static_file
-# from watson_developer_cloud import NaturalLanguageUnderstandingV1
-# import watson_developer_cloud.natural_language_understanding.features.v1 as \
-#     features
+from watson_developer_cloud import NaturalLanguageUnderstandingV1
+import watson_developer_cloud.natural_language_understanding.features.v1 as \
+    features
 
-# natural_language_understanding = NaturalLanguageUnderstandingV1(
-#     version='2017-02-27',
-#     username="8aab4e6f-ed79-45b3-9136-0d0e76597772",
-#     password='k3w7UbjdobiP')
+@bottle.route('/new')
+def queryInput():
+    return template('templates/new')
 
-# response = natural_language_understanding.analyze(
-#     text='Bruce Banner is the Hulk and Bruce Wayne is BATMAN! '
-#          'Superman fears not Banner, but Wayne.',
-#     features=[features.Entities(), features.Keywords()])
+@bottle.route('/new', method="POST")
+def test_model():
 
-# print(json.dumps(response, indent=2))
+    model = request.forms.get('model')
 
-# @bottle.route('/', method='GET')
-# def new_item():
-#     query = request.forms.get('query')
-    
-#     conn = psycopg2.connect(
-#             database="ygqehxjv",
-#             user="ygqehxjv",
-#             password="q4LBGXfLDhX9nWHUKwCzxquKfhTe7Tqf",
-#             host="echo.db.elephantsql.com",
-#             port="5432"
-#             )
-#     new = request.GET.task.strip()
-#     # try:
-#     cursor = conn.cursor()
-#     cursor.execute(query, new)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        version='2017-02-27',
+        username="8aab4e6f-ed79-45b3-9136-0d0e76597772",
+        password='k3w7UbjdobiP')
 
+    response = natural_language_understanding.analyze(
+        text=model,
+        features=[features.Entities(), features.Keywords()])
 
-#     #Close the database connection
-#     conn.commit()
-#     cursor.close()
+    print(json.dumps(response, indent=2))
 
-    
-#     output = template('templates/insert')
-
-#     return output
-
-# @bottle.route('/new')
-# def insertInto():
-#     output = template('templates/insert')
-#     return output 
 
 
 @bottle.route('/inserted', method='POST')
@@ -60,6 +38,7 @@ def new_item():
 
     new = request.POST.task.strip()
     task = request.forms.get('task')
+    print(task)
 
     conn = psycopg2.connect(
         database="ygqehxjv",
@@ -101,7 +80,6 @@ def index():
     cursor = conn.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
-
 
     #Close the database connection
     cursor.close()

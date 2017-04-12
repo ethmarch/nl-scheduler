@@ -17,7 +17,7 @@
    		 </div>
   		</div>
 	</nav>
-  <h1>Here is your updated table:</h1>
+  <h1 class="text-center">Here is your updated table:</h1>
   <table class="table table-center">
     %for row in rows:
         <tr> 
