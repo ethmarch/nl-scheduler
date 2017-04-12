@@ -10,10 +10,12 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 import watson_developer_cloud.natural_language_understanding.features.v1 as \
     features
 
+#renders template before page load
 @bottle.route('/new')
 def queryInput():
     return template('templates/new')
 
+#for the /new page, dont worry about this 
 @bottle.route('/new', method="POST")
 def test_model():
 
@@ -31,7 +33,7 @@ def test_model():
     print(json.dumps(response, indent=2))
 
 
-
+#for insert and delete statements, this is the second text box
 @bottle.route('/inserted', method='POST')
 def new_item():
 
@@ -59,12 +61,15 @@ def new_item():
 
     return template('templates/insert', rows=result)
 
+#renders the templates on the page load so that the functions can get the data from the forms
+#without this then the forms are not read
 @bottle.route('/')
 def queryInput():
     output = template('templates/front')
 
     return output 
 
+#for select statements, this is the first text box
 @bottle.route('/', method='POST')
 def index():
     query = request.forms.get('query')
