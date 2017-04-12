@@ -3,24 +3,30 @@
     <title>Natural Language Scheduler</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 </head>
 
 <body>
-<div class="btn-group">
-  <h1> Please Select Who You Are </h1>
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Select <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="index">Student</a></li>
-    <li><a href="#">Professor</a></li>
-    <li><a href="#">Admin</a></li>
-  </ul>
-</div>
-  <form method="post">
-    Query: <input name="query" type="text" />
-    <input type="submit" />
-  </form>
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="text-center"> Welcome to the Natrual Language Scheduler</h1>
+      <p> Interact with your schedule in the most intuitive way possible: regular sentences. Add and remove classes, search for professors, and view any detail you want simply by requesting the information in plain English.</p>
+    </div>
+  </div>
+  <div class="box">
+    <h3> Just enter a regular question to get information on your schedule: </h3>
+    <form method="post">
+      <input class="custom-query-input" name="query" type="text" placeholder="Enter Request" />
+      <input class="custom-query-button" type="submit" />
+    </form>
+    <p>Add or remove an item from the database:</p>
+      <form action="/inserted" method="post">
+        <input class="custom-query-input" type="text" name="task">
+        <input class="custom-query-button" type="submit" name="save" value="save">
+      </form>
+  </div>
 
 
   <!-- Bootstrap Core JavaScript -->

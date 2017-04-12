@@ -17,19 +17,14 @@
    		 </div>
   		</div>
 	</nav>
-	<h1 class="text-center">These are the {{title}}s in the database</h1>
-	<table class="table table-center">
-	%for row in rows:
-	    <tr> 
-	    %for col in row:
-	        <td>{{col}}</td>
-	    %end
-	    </tr>
-	%end
-	</table>
-
-
-	<!-- Bootstrap Core JavaScript -->
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" 					crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</body>
+  <h1>Here is your updated table:</h1>
+  <table class="table table-center">
+    %for row in rows:
+        <tr> 
+        %for col in row:
+            <td>{{col}}</td>
+        %end
+        </tr>
+    %end
+  </table>
+  </body>
