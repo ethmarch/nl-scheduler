@@ -140,53 +140,53 @@ INSERT INTO course VALUES ('CS', 2800, 'Logic and Computation', 10:30:00, 11:35:
 
 
 -- Student Reg values
-INSERT INTO student_reg VALUES (1, ,34567);
+INSERT INTO student_reg VALUES (1, 1,34567);
 
-INSERT INTO student_reg VALUES (1, ,52346);
+INSERT INTO student_reg VALUES (1, 2,52346);
 
-INSERT INTO student_reg VALUES (2, ,34567);
+INSERT INTO student_reg VALUES (2, 1,34567);
 
-INSERT INTO student_reg VALUES (2, ,52346);
+INSERT INTO student_reg VALUES (2, 2,52346);
 
-INSERT INTO student_reg VALUES (3, ,41570);
+INSERT INTO student_reg VALUES (3, 1,41570);
 
-INSERT INTO student_reg VALUES (3, ,12534);
+INSERT INTO student_reg VALUES (3, 2,12534);
 
-INSERT INTO student_reg VALUES (4, ,41570);
+INSERT INTO student_reg VALUES (4, 1,41570);
 
-INSERT INTO student_reg VALUES (4, ,12534);
+INSERT INTO student_reg VALUES (4, 2,12534);
 
-INSERT INTO student_reg VALUES (5, ,35672);
+INSERT INTO student_reg VALUES (5, 1,35672);
 
-INSERT INTO student_reg VALUES (5, ,65738);
+INSERT INTO student_reg VALUES (5, 2,65738);
 
-INSERT INTO student_reg VALUES (6, ,35672);
+INSERT INTO student_reg VALUES (6, 1,35672);
 
-INSERT INTO student_reg VALUES (6, ,65738);
+INSERT INTO student_reg VALUES (6, 2,65738);
 
-INSERT INTO student_reg VALUES (7, ,89576);
+INSERT INTO student_reg VALUES (7, 1,89576);
 
-INSERT INTO student_reg VALUES (7, ,43167);
+INSERT INTO student_reg VALUES (7, 2,43167);
 
-INSERT INTO student_reg VALUES (8, ,89576);
+INSERT INTO student_reg VALUES (8, 1,89576);
 
-INSERT INTO student_reg VALUES (8, ,43167);
+INSERT INTO student_reg VALUES (8, 2,43167);
 
-INSERT INTO student_reg VALUES (9, ,41570);
+INSERT INTO student_reg VALUES (9, 1,41570);
 
-INSERT INTO student_reg VALUES (9, ,52346);
+INSERT INTO student_reg VALUES (9, 2,52346);
 
-INSERT INTO student_reg VALUES (10, ,41570);
+INSERT INTO student_reg VALUES (10, 1,41570);
 
-INSERT INTO student_reg VALUES (10, ,52346);
+INSERT INTO student_reg VALUES (10, 2,52346);
 
-INSERT INTO student_reg VALUES (11, ,89576);
+INSERT INTO student_reg VALUES (11, 1,89576);
 
-INSERT INTO student_reg VALUES (11, ,65738);
+INSERT INTO student_reg VALUES (11, 2,65738);
 
-INSERT INTO student_reg VALUES (12, ,34567);
+INSERT INTO student_reg VALUES (12, 1,34567);
 
-INSERT INTO student_reg VALUES (12, ,12534);
+INSERT INTO student_reg VALUES (12, 2,12534);
 
 
 -- Student History Values

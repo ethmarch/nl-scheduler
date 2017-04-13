@@ -6,31 +6,31 @@ import json
 import mysql.connector
 import psycopg2
 from bottle import get, post, request, route, run, template, static_file
-from watson_developer_cloud import NaturalLanguageUnderstandingV1
-import watson_developer_cloud.natural_language_understanding.features.v1 as \
-    features
+# from watson_developer_cloud import NaturalLanguageUnderstandingV1
+# import watson_developer_cloud.natural_language_understanding.features.v1 as \
+#     features
 
-#renders template before page load
-@bottle.route('/new')
-def queryInput():
-    return template('templates/new')
+# #renders template before page load
+# @bottle.route('/new')
+# def queryInput():
+#     return template('templates/new')
 
-#for the /new page, dont worry about this 
-@bottle.route('/new', method="POST")
-def test_model():
+# #for the /new page, dont worry about this 
+# @bottle.route('/new', method="POST")
+# def test_model():
 
-    model = request.forms.get('model')
+#     model = request.forms.get('model')
 
-    natural_language_understanding = NaturalLanguageUnderstandingV1(
-        version='2017-02-27',
-        username="8aab4e6f-ed79-45b3-9136-0d0e76597772",
-        password='k3w7UbjdobiP')
+#     natural_language_understanding = NaturalLanguageUnderstandingV1(
+#         version='2017-02-27',
+#         username="8aab4e6f-ed79-45b3-9136-0d0e76597772",
+#         password='k3w7UbjdobiP')
 
-    response = natural_language_understanding.analyze(
-        text=model,
-        features=[features.Entities(), features.Keywords()])
+#     response = natural_language_understanding.analyze(
+#         text=model,
+#         features=[features.Entities(), features.Keywords()])
 
-    print(json.dumps(response, indent=2))
+#     print(json.dumps(response, indent=2))
 
 
 #for insert and delete statements, this is the second text box
@@ -59,7 +59,12 @@ def new_item():
         lname = name[name.find(" ") + 1:].capitalize()
         major = task[task.find("major") + 6:task.find("and") - 1].capitalize()
         grad = task[task.find("year") + 5:]
-        task = "Insert into student (fname, lname, grad, major) values('{}','{}',{},'{}')".format(fname, lname, grelsad, major)
+        task = "Insert into student (fname, lname, grad, major) values('{}','{}',{},'{}')".format(fname, lname, grad, major)
+    elif "delete" in task or "drop" in task:
+        table = "student"
+        fname = task.split()[3]
+        print(fname)
+        task = "delete from student where fname = '{}'".format(fname)    
 
     c.execute(task, new)
     c.execute('select * from' + ' ' + table)

@@ -21,10 +21,10 @@
       <input class="custom-query-input" name="query" type="text" placeholder="Enter Request" />
       <input class="custom-query-button" type="submit" />
     </form>
-    <p>Add or remove an item from the database:</p>
+    <h3>Add or remove an item from the database:</h3>
       <form action="/inserted" method="post">
-        <input class="custom-query-input" type="text" name="task">
-        <input class="custom-query-button" type="submit" name="save" value="save">
+        <input class="custom-query-input" type="text" name="task" placeholder="Enter Updates" />
+        <input class="custom-query-button" type="submit" name="save" value="Submit">
       </form>
   </div>
 
