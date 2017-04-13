@@ -39,7 +39,7 @@ def new_item():
 
 
     new = request.POST.task.strip()
-    task = request.forms.get('task')
+    task = request.forms.get('task').lower()
     print(task)
 
     conn = psycopg2.connect(
@@ -51,6 +51,15 @@ def new_item():
         )
     c = conn.cursor()
     table = task.split()[2]
+
+    if "add" in task or "create" in task:
+        table = "student"
+        name = task[task.find("named") + 6:task.find("with") - 1]
+        fname = name[:name.find(" ")].capitalize()
+        lname = name[name.find(" ") + 1:].capitalize()
+        major = task[task.find("major") + 6:task.find("and") - 1].capitalize()
+        grad = task[task.find("year") + 5:]
+        task = "Insert into student (fname, lname, grad, major) values('{}','{}',{},'{}')".format(fname, lname, grelsad, major)
 
     c.execute(task, new)
     c.execute('select * from' + ' ' + table)
@@ -72,7 +81,7 @@ def queryInput():
 #for select statements, this is the first text box
 @bottle.route('/', method='POST')
 def index():
-    query = request.forms.get('query')
+    query = request.forms.get('query').lower()
     
     conn = psycopg2.connect(
             database="ygqehxjv",
@@ -83,6 +92,11 @@ def index():
             )
     # try:
     cursor = conn.cursor()
+
+    if "show" in query or "get" in query:
+        table = query[query.find('all')+4:len(query)-1]
+        query = "Select * from {}".format(table)
+
     cursor.execute(query)
     result = cursor.fetchall()
 
