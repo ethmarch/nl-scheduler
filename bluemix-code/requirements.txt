@@ -1,3 +1,4 @@
 ./bottle
 ./mysql-connector
 psycopg2>=2.7,<2.8 --no-binary :all:
+watson_developer_cloud
