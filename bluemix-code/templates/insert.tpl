@@ -12,7 +12,7 @@
   		<div class="container-fluid">
     	 <div class="navbar-header">
       		 <a class="navbar-brand" href="/">
-        		<img alt="Brand" src="https://www.sott.net/images/icons/brain.png">
+        		<img class="home-button" alt="Brand" src="https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678085-house-128.png">
      		 </a>
    		 </div>
   		</div>

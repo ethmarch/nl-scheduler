@@ -43,3 +43,7 @@ body {
 .site-description {
 	width: 750px;
 }
+
+.home-button {
+	widows: 30px;
+}

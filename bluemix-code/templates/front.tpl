@@ -16,11 +16,11 @@
     </div>
   </div>
   <div class="box">
-    <h3> With our current implementation, please structure search your query ilke so: </h3>
+    <h2 class="text-center site-description">If you would like to make a regular English query, please limit it to the student table for now. A regular SQL query will work for any other table.</h2>
+    <h3> With our current implementation, please structure search your query like so: </h3>
     <ul>
-      <li>show me all the students</li>
+      <li>show me all students</li>
       <li>show me the student Ethan March</li>
-      <li>show me the class with capacity 30</li>
     </ul>
     <form method="post">
       <input class="custom-query-input" name="query" type="text" placeholder="Enter Request" />

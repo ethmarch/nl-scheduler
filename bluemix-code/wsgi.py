@@ -10,6 +10,11 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 import watson_developer_cloud.natural_language_understanding.features.v1 as \
     features
 
+db_connection = mysql.connector.connect(host = "us-cdbr-iron-east-03.cleardb.net",
+                                    user = "bc420cc79493cf", 
+                                    password = "b32f1276", 
+                                    database = "ad_530d6a0a45da39a", 
+                                    port = "3306")
 #renders template before page load
 @bottle.route('/new')
 def queryInput():
@@ -42,16 +47,13 @@ def new_item():
     new = request.POST.task.strip()
     task = request.forms.get('task').lower()
 
-    conn = mysql.connector.connect(host = "us-cdbr-iron-east-03.cleardb.net",
-                                    user = "bc420cc79493cf", 
-                                    password = "b32f1276", 
-                                    database = "ad_530d6a0a45da39a", 
-                                    port = "3306")
+    conn = db_connection
+
     try:
         c = conn.cursor()
         table = task.split()[2]
 
-        if "add" in task or "create" in task:
+        if "add" in task:
             table = "student"
             name = task[task.find("named") + 6:task.find("with") - 1]
             fname = name[:name.find(" ")].capitalize()
@@ -60,7 +62,7 @@ def new_item():
             grad = task[task.find("year") + 5:]
             task = "insert into student (fname, lname, grad, major) values('{}','{}',{},'{}')".format(
                 fname, lname, grad, major)
-        elif "delete" in task or "drop" in task:
+        elif "delete the" in task or "drop" in task:
             table = task.split()[2]
             fname = task.split()[3].capitalize()
             task = "delete from {} where fname = '{}'".format(table, fname)   
@@ -103,20 +105,25 @@ def queryInput():
 def index():
     query = request.forms.get('query').lower()
     
-    conn = mysql.connector.connect(host = "us-cdbr-iron-east-03.cleardb.net",
-                                    user = "bc420cc79493cf", 
-                                    password = "b32f1276", 
-                                    database = "ad_530d6a0a45da39a", 
-                                    port = "3306")
+    conn = db_connection
+    
     try:
         cursor = conn.cursor()
 
-        if "show" in query or "get" in query:
+        if "show" in query and "all" in query:
             table = query[query.find('all')+4:len(query)-1]
             query = "Select * from {}".format(table)
+        elif "show" in query and "the student" in query:
+            table = 'student'
+            fname = query.split()[4]
+            query = "select * from {} where fname='{}'".format(table, fname)
+
+
 
         cursor.execute(query)
         result = cursor.fetchall()
+        if len(result) == 0:
+            return template('templates/noResult')
 
         #Close the database connection
         cursor.close()
@@ -131,6 +138,7 @@ def index():
     except Exception as err:
         # return 500 error if any exceptions are thrown and report exceptions via webpage
         err = "%s" % (err)
+        print(err)
         error = err.split()
         exception = error[2] + " " + error[3][20:len(error[3]) - 1] + " " + error[4] + " " + error[5]
         return template("templates/error", exception=exception)
