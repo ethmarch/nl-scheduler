@@ -39,13 +39,11 @@
 body {
 	font-family: 'Roboto', sans-serif;
 }
-/*
-"username": "2de7fbce-93e6-4ac2-bccb-b70f795f4461",
-        "password": "Tn5vWXsMUjws"
 
- curl -i -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" -F training_data=@/Users/gabrielcenteno/Downloads/weather_data_train.csv -F training_metadata="{\"language\":\"en\",\"name\":\"TutorialClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
+.site-description {
+	width: 750px;
+}
 
-curl -G -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/90e7b7x198-nlc-36297/classify" --data-urlencode "text=How hot will it be today?"
-
-curl -X DELETE -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/90e7b7x198-nlc-36297"
-*/
+.home-button {
+	widows: 30px;
+}
