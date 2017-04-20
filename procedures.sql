@@ -1,5 +1,13 @@
 USE scheduling;
 
+DROP PROCEDURE IF EXISTS add_student;
+DROP PROCEDURE IF EXISTS add_course;
+DROP PROCEDURE IF EXISTS get_schedule;
+DROP PROCEDURE IF EXISTS add_class;
+DROP PROCEDURE IF EXISTS drop_class;
+DROP PROCEDURE IF EXISTS assign_prof;
+
+
 # Add's a student to the student table with the given parameters
 DELIMITER $$
 CREATE PROCEDURE add_student
