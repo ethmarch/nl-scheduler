@@ -187,18 +187,24 @@ CREATE TRIGGER check_prerequisites
     FOR EACH ROW
     BEGIN
 		DECLARE	not_satisfied	INT;
+        DECLARE	reg_subj			VARCHAR(50);
+        DECLARE	reg_num			INT;
+        
+        SELECT course_subject, course_num
+        INTO reg_subj, reg_num
+        FROM course
+        WHERE crn = NEW.reg_crn;
         
 		SELECT COUNT(*)
         INTO not_satisfied
-        FROM
-        (
-			SELECT *
-			FROM prereq a1
-				LEFT JOIN student_history a2
-					ON a1.prereq_subj = a2.taken_subj
-						AND a1.prereq_num = a2.taken_num
-			WHERE a2.student_id IS NULL
-        ) AS a3;
+		FROM prereq a1
+			LEFT JOIN student_history a2
+				ON a1.prereq_subj = a2.taken_subj
+					AND a1.prereq_num = a2.taken_num
+					AND student_id = NEW.student_id
+		WHERE student_id IS NULL 
+			AND parent_subj = reg_subj
+			AND parent_num = reg_num;
         
         IF not_satisfied > 0
         THEN
