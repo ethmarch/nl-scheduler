@@ -40,11 +40,11 @@ CREATE TRIGGER prof_in_reg_after_added_to_course
         
         IF (NEW.prof_id IS NOT NULL)
         THEN
-			SELECT MAX(teaching_seq)
+			SELECT IF(COUNT(teaching_seq) = 0, 0, MAX(teaching_seq))
 			INTO max_seq
 			FROM prof_reg
 			WHERE prof_id = NEW.prof_id;
-			
+            
 			INSERT INTO prof_reg
 			VALUES (NEW.prof_id, max_seq + 1, NEW.crn);
         END IF;
@@ -62,14 +62,14 @@ CREATE TRIGGER prof_in_reg_after_added_to_course
     FOR EACH ROW
     BEGIN
 		DECLARE max_seq	INT;
-		
+        
 		IF NOT (NEW.prof_id <=> OLD.prof_id)
         THEN
-			SELECT MAX(teaching_seq)
+			SELECT IF(COUNT(teaching_seq) = 0, 0, MAX(teaching_seq))
 			INTO max_seq
 			FROM prof_reg
 			WHERE prof_id = NEW.prof_id;
-			
+            
 			INSERT INTO prof_reg
 			VALUES (NEW.prof_id, max_seq + 1, NEW.crn);
 		END IF;
@@ -192,15 +192,12 @@ CREATE TRIGGER check_prerequisites
         INTO not_satisfied
         FROM
         (
-			SELECT a1.prereq_subj, a1.prereq_num
-            FROM prereq AS a1
-            WHERE
-            (
-				SELECT 1
-                FROM student_history AS a2
-                WHERE a2.taken_subj = a1.prereq_subj
-					AND a2.taken_num = a1.prereq_num
-            )
+			SELECT *
+			FROM prereq a1
+				LEFT JOIN student_history a2
+					ON a1.prereq_subj = a2.taken_subj
+						AND a1.prereq_num = a2.taken_num
+			WHERE a2.student_id IS NULL
         ) AS a3;
         
         IF not_satisfied > 0
