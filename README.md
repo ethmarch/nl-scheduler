@@ -2,6 +2,7 @@
 Final project for CS 3200 Database Design at Northeastern University
 
 This is an IBM Bluemix app that can be deployed using CloudFoundry through terminal on your local machine.
+The front end is Bootstrapped and doesn't have any other JS at this time, we load a new page for requests.
 
 Make sure you have the CloudFoundry tap for terminal installed, if you don't follow these steps :
 https://github.com/cloudfoundry/cli#downloads
