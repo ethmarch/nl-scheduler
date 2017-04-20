@@ -38,7 +38,7 @@ http://bottlepy.org/docs/dev/index.html
 The app uses ClearDB, a SQL distribution, which is hosted in the cloud. DO NOT CHANGE THE USERNAME AND PASSWORD IN THE wsgi.py FILE FOR THE CONNECTION. If you want to add to the database you can do so through applications like mySQLWorkbench by just adding the database to your connections.
 
 
-We intended to use IBM's Watson Natural Language Understanding in order to take in regular English queries and pass them to the backend as SQL statementsm but the distribution is too new and doesn't support application connections. We are currently searching for alternatives in order to incorporate this key element into our project. 
+We intended to use IBM's Watson Natural Language Understanding in order to take in regular English queries and pass them to the backend as SQL statements but the distribution is too new and doesn't support application connections. We are currently searching for alternatives in order to incorporate this key element into our project. 
 
 
 
