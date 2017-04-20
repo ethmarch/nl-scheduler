@@ -1,0 +1,51 @@
+.vert-buttons {
+	margin-left: 400px;
+	margin-top: 100px
+}
+
+.custom-query {
+	margin-top: 100px;
+	margin-left: 100px;
+}
+
+.jumbotron {
+	background-color: #00B4D0;
+}
+
+.custom-query-button {
+	background-color: #FF3375;
+	border: none;
+	color: white;
+	height: 30px;
+	width: 60px;
+}
+
+.custom-query-input {
+	height: 30px;
+	width: 700px;
+}
+
+.box {
+	margin-top: 50px;
+	margin-left: 30%;
+}
+
+.table-center {
+	width: 1000px;
+	margin: auto;
+	margin-top: 75px;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+/*
+"username": "2de7fbce-93e6-4ac2-bccb-b70f795f4461",
+        "password": "Tn5vWXsMUjws"
+
+ curl -i -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" -F training_data=@/Users/gabrielcenteno/Downloads/weather_data_train.csv -F training_metadata="{\"language\":\"en\",\"name\":\"TutorialClassifier\"}" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers"
+
+curl -G -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/90e7b7x198-nlc-36297/classify" --data-urlencode "text=How hot will it be today?"
+
+curl -X DELETE -u "2de7fbce-93e6-4ac2-bccb-b70f795f4461":"Tn5vWXsMUjws" "https://gateway.watsonplatform.net/natural-language-classifier/api/v1/classifiers/90e7b7x198-nlc-36297"
+*/
