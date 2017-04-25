@@ -41,15 +41,19 @@ CREATE TABLE course
     days				SET('M', 'T', 'W', 'R', 'F')	NOT NULL,
     crn					INT								PRIMARY KEY,
     capacity			INT								NOT NULL,
-    prof_id				INT								NOT NULL,
-    room_idx			INT								NOT NULL,
+    prof_id				INT,
+    room_idx			INT,
     credits				INT 							NOT NULL,
     CONSTRAINT course_fk1
 		FOREIGN KEY (prof_id)
-        REFERENCES professor (prof_id),
+        REFERENCES professor (prof_id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
 	CONSTRAINT course_fk2
 		FOREIGN KEY (room_idx)
         REFERENCES classroom (room_idx)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 
 
@@ -75,10 +79,14 @@ CREATE TABLE student_reg
 		PRIMARY KEY (student_id, learning_seq),
     CONSTRAINT student_reg_fk1
 		FOREIGN KEY (student_id)
-        REFERENCES student (student_id),
+        REFERENCES student (student_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
 	CONSTRAINT student_reg_fk2
 		FOREIGN KEY (reg_crn)
         REFERENCES course (crn)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 
@@ -94,6 +102,8 @@ CREATE TABLE student_history
     CONSTRAINT student_history_fk1
 		FOREIGN KEY (student_id)
         REFERENCES student (student_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 
@@ -108,6 +118,8 @@ CREATE TABLE prof_subject
     CONSTRAINT prof_subject_fk1
 		FOREIGN KEY (prof_id)
         REFERENCES professor (prof_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 
@@ -120,8 +132,12 @@ CREATE TABLE prof_reg
 		PRIMARY KEY (prof_id, teaching_seq),
     CONSTRAINT prof_reg_fk1
 		FOREIGN KEY (prof_id)
-        REFERENCES professor (prof_id),
+        REFERENCES professor (prof_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
 	CONSTRAINT prof_reg_fk2
 		FOREIGN KEY (reg_crn)
         REFERENCES course (crn)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
