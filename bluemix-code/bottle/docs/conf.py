@@ -7,7 +7,7 @@ sys.path.insert(0, bottle_dir)
 import bottle
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.viewcode']
-master_doc = 'index'
+main_doc = 'index'
 project = u'Bottle'
 copyright = unicode('2009-%s, %s' % (time.strftime('%Y'), bottle.__author__))
 version = ".".join(bottle.__version__.split(".")[:2])
